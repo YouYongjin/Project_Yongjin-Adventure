@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed;
     public float jumpForce;
     Rigidbody2D playerRigid;
+    bool jumpCheck = false;
 
     void Awake()
     {
@@ -18,7 +19,7 @@ public class PlayerController : MonoBehaviour
         PlayerMove();
         MoveSpeedUp();
         MoveStop();
-        PlayerJump();
+        if(jumpCheck)PlayerJump();
     }    
 
     void PlayerMove()
@@ -57,34 +58,30 @@ public class PlayerController : MonoBehaviour
 
     void PlayerJump()
     {
-        if(jumpCheck == true)
-        {
-            if(Input.GetKeyDown(KeyCode.Space))
+        //if(jumpCheck == true)
+        //{
+            if(Input.GetButtonDown("Jump"))
             {
                 playerRigid.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             }
-        }
+        //}
     }
 
-    bool jumpCheck = false;
-    void OnCollisionStay(Collision collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.collider.gameObject.CompareTag("Ground"))
+        if (collision.collider.gameObject.CompareTag("Ground"))
         {
             jumpCheck = true;
             Debug.Log("점프 가능");
         }
-        else
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.collider.gameObject.CompareTag("Ground"))
         {
             jumpCheck = false;
             Debug.Log("점프 불가능");
         }
     }
-    //void PlayerMove()
-    //{
-    //    if(Input.GetKeyDown(KeyCode.A))
-    //    {
-
-    //    }
-    //}
 }
