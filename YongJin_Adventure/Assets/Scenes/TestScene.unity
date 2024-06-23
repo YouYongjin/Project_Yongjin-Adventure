@@ -152,6 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bfd5604476adf046a8efdd04e515b64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerController: {fileID: 2038760982}
+  playerTransform: {fileID: 0}
+  baseHeight: 0
 --- !u!4 &16747139
 Transform:
   m_ObjectHideFlags: 0
@@ -1538,6 +1541,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   jumpForce: 10
+  playerVector: {x: 0, y: 0}
 --- !u!58 &2038760983
 CircleCollider2D:
   m_ObjectHideFlags: 0
