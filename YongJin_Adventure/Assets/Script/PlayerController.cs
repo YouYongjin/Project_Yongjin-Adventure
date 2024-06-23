@@ -6,12 +6,16 @@ public class PlayerController : MonoBehaviour
 {
     public float moveSpeed;
     public float jumpForce;
+
     Rigidbody2D playerRigid;
+    public Vector2 playerVector;
+    
     bool jumpCheck = false;
 
     void Awake()
     {
-        playerRigid = GetComponent<Rigidbody2D>();        
+        playerRigid = GetComponent<Rigidbody2D>();
+        playerVector = this.gameObject.transform.position;
     }
 
     void Update()
