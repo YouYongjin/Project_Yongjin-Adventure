@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameManager gameManager;
+
     public float moveSpeed;
     public float jumpForce;
 
@@ -24,7 +26,12 @@ public class PlayerController : MonoBehaviour
         MoveSpeedUp();
         MoveStop();
         if(jumpCheck)PlayerJump();
-    }    
+    }
+
+    void FixedUpdate()
+    {
+        gameManager.PlayerCurrentLocation(this.transform, 0f,playerVector.y, playerVector.y + 0f);
+    }
 
     void PlayerMove()
     {
