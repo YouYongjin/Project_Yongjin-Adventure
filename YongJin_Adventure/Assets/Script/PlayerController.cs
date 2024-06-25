@@ -28,11 +28,6 @@ public class PlayerController : MonoBehaviour
         if(jumpCheck)PlayerJump();
     }
 
-    void FixedUpdate()
-    {
-        gameManager.PlayerCurrentLocation(this.transform, 0f,playerVector.y, playerVector.y + 0f);
-    }
-
     void PlayerMove()
     {
         float h = Input.GetAxisRaw("Horizontal");
