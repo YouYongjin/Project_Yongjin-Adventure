@@ -7,12 +7,16 @@ public class PlayerController : MonoBehaviour
     public GameManager gameManager;
 
     public float moveSpeed;
+
     public float jumpForce;
+    public LayerMask groundLayer;  // 바닥 레이어를 설정하기 위한 레이어 마스크
+    public Transform groundCheck;  // 바닥 체크를 위한 Transform
 
     Rigidbody2D playerRigid;
     public Vector2 playerVector;
     
     bool jumpCheck = false;
+    bool isGrounded;
 
     void Awake()
     {
@@ -25,7 +29,19 @@ public class PlayerController : MonoBehaviour
         PlayerMove();
         MoveSpeedUp();
         MoveStop();
-        if(jumpCheck)PlayerJump();
+        //if(jumpCheck)PlayerJump();
+
+        CheckGrounded();
+
+        if(isGrounded && Input.GetButtonDown("Jump"))
+        {
+            Jump();
+        }
+    }
+
+    void FixedUpdate()
+    {
+        //RaycastJump();
     }
 
     void PlayerMove()
@@ -62,32 +78,63 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void PlayerJump()
-    {
-        //if(jumpCheck == true)
-        //{
-            if(Input.GetButtonDown("Jump"))
-            {
-                playerRigid.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            }
-        //}
-    }
+    //void PlayerJump()
+    //{
+    //    //if(jumpCheck == true)
+    //    //{
+    //        if(Input.GetButtonDown("Jump"))
+    //        {
+    //            playerRigid.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+    //        }
+    //    //}
+    //}
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (collision.collider.gameObject.CompareTag("Ground"))
+    //    {
+    //        jumpCheck = true;
+    //        Debug.Log("점프 가능");
+    //    }
+    //}
+
+    //private void OnCollisionExit2D(Collision2D collision)
+    //{
+    //    if (collision.collider.gameObject.CompareTag("Ground"))
+    //    {
+    //        jumpCheck = false;
+    //        Debug.Log("점프 불가능");
+    //    }
+    //}
+
+    void CheckGrounded()
     {
-        if (collision.collider.gameObject.CompareTag("Ground"))
+        float rayLength = 0.1f;  // 레이 길이
+        RaycastHit2D hit = Physics2D.Raycast(groundCheck.position, Vector2.down, rayLength, groundLayer);
+
+        if (hit.collider != null)
         {
-            jumpCheck = true;
-            Debug.Log("점프 가능");
+            isGrounded = true;
+            Debug.Log("Grounded");
+        }
+        else
+        {
+            isGrounded = false; 
+            Debug.Log("Not Grounded");
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    void Jump()
     {
-        if (collision.collider.gameObject.CompareTag("Ground"))
+        playerRigid.velocity = new Vector2(playerRigid.velocity.x, jumpForce);
+    }
+
+    void OnDrawGizmos()
+    {
+        if(groundCheck != null)
         {
-            jumpCheck = false;
-            Debug.Log("점프 불가능");
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(groundCheck.position, groundCheck.position + Vector3.down * 0.1f);
         }
     }
 }
