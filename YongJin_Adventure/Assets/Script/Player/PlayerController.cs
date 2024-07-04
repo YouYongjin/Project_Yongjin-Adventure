@@ -7,16 +7,17 @@ public class PlayerController : MonoBehaviour
     public GameManager gameManager;
 
     public float moveSpeed;
-
     public float jumpForce;
+    bool isGrounded;
+    public int score = 0;
+    GameObject scorePoint;
+
     public LayerMask groundLayer;  // 바닥 레이어를 설정하기 위한 레이어 마스크
     public Transform groundCheck;  // 바닥 체크를 위한 Transform
 
     Rigidbody2D playerRigid;
     public Vector2 playerVector;
     
-    bool jumpCheck = false;
-    bool isGrounded;
 
     void Awake()
     {
@@ -29,16 +30,11 @@ public class PlayerController : MonoBehaviour
         PlayerMove();
         MoveSpeedUp();
         MoveStop();
-        //if(jumpCheck)PlayerJump();
 
         CheckGrounded();
+        if(isGrounded && Input.GetButtonDown("Jump"))Jump();
 
-        if(isGrounded && Input.GetButtonDown("Jump"))
-        {
-            Jump();
-        }
     }
-
     void FixedUpdate()
     {
         //RaycastJump();
@@ -78,35 +74,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //void PlayerJump()
-    //{
-    //    //if(jumpCheck == true)
-    //    //{
-    //        if(Input.GetButtonDown("Jump"))
-    //        {
-    //            playerRigid.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-    //        }
-    //    //}
-    //}
-
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    if (collision.collider.gameObject.CompareTag("Ground"))
-    //    {
-    //        jumpCheck = true;
-    //        Debug.Log("점프 가능");
-    //    }
-    //}
-
-    //private void OnCollisionExit2D(Collision2D collision)
-    //{
-    //    if (collision.collider.gameObject.CompareTag("Ground"))
-    //    {
-    //        jumpCheck = false;
-    //        Debug.Log("점프 불가능");
-    //    }
-    //}
-
     void CheckGrounded()
     {
         float rayLength = 0.1f;  // 레이 길이
@@ -135,6 +102,24 @@ public class PlayerController : MonoBehaviour
         {
             Gizmos.color = Color.red;
             Gizmos.DrawLine(groundCheck.position, groundCheck.position + Vector3.down * 0.1f);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // 
+        if(collision.tag == "Point")
+        {
+            scorePoint = collision.gameObject;
+            Debug.Log(scorePoint.name);
+        }
+
+        // 아이템 획득
+        Item item = collision.GetComponent<Item>();
+        if (item != null)
+        {
+            item.Collect(this);  // 아이템을 획득합니다.
+            Debug.Log($"Total Score: {score}");
         }
     }
 }

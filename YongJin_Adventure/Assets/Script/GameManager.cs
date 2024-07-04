@@ -7,7 +7,9 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour                
 {                                                       
     public PlayerController playerController;
+    public Text scorePopupTextPrefab;
 
+    // 높이 위치 코드
     public void PlayerCurrentLocation(Transform playerTransform, float baseHeight, float resultYPos, TextMeshProUGUI text, float truncatedFloat)
     {
         float playerYPos = playerTransform.position.y;
@@ -31,5 +33,8 @@ public class GameManager : MonoBehaviour
         // UI 표시
         text.text = $"{truncatedFloat:F1} M";
     }   
+
+    // 점수 획득 UI 코드
+
 }                           
         
